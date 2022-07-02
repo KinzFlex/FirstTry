@@ -16,7 +16,7 @@ contract NFTContract is ERC1155, Ownable {
     uint256[] minted = [0,0,0];
     uint256[] rates = [0.01 ether, 0.02 ether, 0.03 ether];
 
-    constructor() ERC1155("https://gateway.pinata.cloud/ipfs/Qmf7Pb7DAuXP4ZJjD9pgVd7oDdTY1V7Sviq9iyn2LWz5bN/{id}.json") {}
+    constructor() ERC1155("https://gateway.pinata.cloud/ipfs/Qmf7Pb7DAuXP4ZJjD9pgVd7oDdTY1V7Sviq9iyn2LWz5bN/{id}.json") {} // Image files in constructor are tickets in envelope, so buyers can not immediatly see what ticket they got 
 
     function mint(address account, uint256 id, uint256 amount) public payable {
 
@@ -26,6 +26,7 @@ contract NFTContract is ERC1155, Ownable {
         require(minted[id] + amount <= supplies[id], "not enough supply");
         require(msg.value >= amount * rates[id], "Not enough ether");
         _mint(msg.sender, id, amount, "");
+        _uri[id] == uri("https://gateway.pinata.cloud/ipfs/Qmf7Pb7DAuXP4ZJjD9pgVd7oDdTY1V7Sviq9iyn2LWz5bN/" + string(id) + ".json") // Reveal NFT after mint -> uri of each NFT gets revealed ticket image
         minted[id] += amount;
     }
 
